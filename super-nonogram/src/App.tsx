@@ -23,12 +23,22 @@ function App() {
     }
   };
 
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDragStart = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
   return (
     <>
       <div
         className="flex flex-col justify-center items-center h-screen w-screen"
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
+        onContextMenu={handleContextMenu}
+        onDragStart={handleDragStart}
       >
         <h1 className="bg-red-200">Super Nonogram</h1>
         <Board />
