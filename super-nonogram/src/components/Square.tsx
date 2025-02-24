@@ -12,13 +12,10 @@ const Square: React.FC<SquareProps> = ({ x, y }) => {
 
   return (
     <div
-      className="square"
+      className="square w-8 h-8 border-1 border-gray-50"
       onMouseEnter={() => useSquareStore.getState().enterSquare(x, y)}
       onMouseLeave={() => useSquareStore.getState().exitSquare()}
       style={{
-        width: '20px',
-        height: '20px',
-        border: '1px solid black',
         backgroundColor:
           squareState === SquareState.Marked
             ? 'black'
