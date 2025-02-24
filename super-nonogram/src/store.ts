@@ -11,6 +11,8 @@ interface SquareStore {
   setRightButtonDown: (down: boolean) => void;
   enterSquare: (x: number, y: number) => void;
   exitSquare: () => void;
+  attemptMarkSquare: (x: number, y: number) => void;
+  attemptFlagSquare: (x: number, y: number) => void;
 }
 
 const createEmptySquares = (size: number): SquareState[][] => {
@@ -28,42 +30,43 @@ export const useSquareStore = create<SquareStore>((set) => ({
   setLeftButtonDown: (down: boolean) =>
     set((state) => {
       if (down && state.x !== null && state.y !== null) {
-        const newSquares = state.squares.map((row) => row.slice()); // Create a shallow copy of the squares array
-        newSquares[state.x][state.y] =
-          newSquares[state.x][state.y] === SquareState.Marked
-            ? SquareState.Empty
-            : SquareState.Marked;
-        return { leftButtonDown: down, squares: newSquares };
+        state.attemptMarkSquare(state.x, state.y);
       }
       return { leftButtonDown: down };
     }),
   setRightButtonDown: (down: boolean) =>
     set((state) => {
       if (down && state.x !== null && state.y !== null) {
-        const newSquares = state.squares.map((row) => row.slice()); // Create a shallow copy of the squares array
-        newSquares[state.x][state.y] =
-          newSquares[state.x][state.y] === SquareState.Flagged
-            ? SquareState.Empty
-            : SquareState.Flagged;
-        return { rightButtonDown: down, squares: newSquares };
+        state.attemptFlagSquare(state.x, state.y);
       }
       return { rightButtonDown: down };
     }),
   enterSquare: (x: number, y: number) =>
     set((state) => {
-      const newSquares = state.squares.map((row) => row.slice()); // Create a shallow copy of the squares array
       if (state.leftButtonDown) {
-        newSquares[x][y] =
-          newSquares[x][y] === SquareState.Marked
-            ? SquareState.Empty
-            : SquareState.Marked;
+        state.attemptMarkSquare(x, y);
       } else if (state.rightButtonDown) {
-        newSquares[x][y] =
-          newSquares[x][y] === SquareState.Flagged
-            ? SquareState.Empty
-            : SquareState.Flagged;
+        state.attemptFlagSquare(x, y);
       }
-      return { squares: newSquares, x, y };
+      return { x, y };
     }),
   exitSquare: () => set({ x: null, y: null }),
+  attemptMarkSquare: (x: number, y: number) =>
+    set((state) => {
+      const newSquares = state.squares.map((row) => row.slice());
+      newSquares[x][y] =
+        newSquares[x][y] === SquareState.Marked
+          ? SquareState.Empty
+          : SquareState.Marked;
+      return { squares: newSquares };
+    }),
+  attemptFlagSquare: (x: number, y: number) =>
+    set((state) => {
+      const newSquares = state.squares.map((row) => row.slice());
+      newSquares[x][y] =
+        newSquares[x][y] === SquareState.Flagged
+          ? SquareState.Empty
+          : SquareState.Flagged;
+      return { squares: newSquares };
+    }),
 }));
