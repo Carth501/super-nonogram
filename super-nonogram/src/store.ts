@@ -3,6 +3,7 @@ import { SquareState } from "./services/squareState";
 
 interface SquareStore {
   squares: SquareState[][];
+  targetBoardState: SquareState[][];
   leftButtonDown: boolean;
   rightButtonDown: boolean;
   x: number | null;
@@ -13,6 +14,7 @@ interface SquareStore {
   exitSquare: () => void;
   attemptMarkSquare: (x: number, y: number, clearing: boolean) => void;
   attemptFlagSquare: (x: number, y: number, clearing: boolean) => void;
+  createTargetBoardState: () => SquareState[][];
 }
 
 const createEmptySquares = (size: number): SquareState[][] => {
@@ -21,8 +23,26 @@ const createEmptySquares = (size: number): SquareState[][] => {
   );
 };
 
+const createTargetBoardState = (size: number): SquareState[][] => {
+  const target = Array.from({ length: size }, () =>
+    Array(size).fill(SquareState.Empty)
+  );
+  const marks = Math.ceil(size * size * 0.5);
+  for (let i = 0; i < marks; i++) {
+    let x = Math.floor(Math.random() * size);
+    let y = Math.floor(Math.random() * size);
+    while (target[x][y] == SquareState.Marked) {
+      x = Math.floor(Math.random() * size);
+      y = Math.floor(Math.random() * size);
+    }
+    target[x][y] = SquareState.Marked;
+  }
+  return target;
+};
+
 export const useSquareStore = create<SquareStore>((set) => ({
   squares: createEmptySquares(5),
+  targetBoardState: createTargetBoardState(5),
   leftButtonDown: false,
   rightButtonDown: false,
   x: null,
@@ -71,4 +91,5 @@ export const useSquareStore = create<SquareStore>((set) => ({
       }
       return { squares: newSquares };
     }),
+  createTargetBoardState: () => createTargetBoardState(5),
 }));
