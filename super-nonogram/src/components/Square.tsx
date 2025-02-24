@@ -1,21 +1,25 @@
-import React from "react";
+import React from 'react';
+import { SquareState } from '../services/squareState';
+import { useSquareStore } from '../store';
 
 interface SquareProps {
   x: number;
   y: number;
-  mark: (x: number, y: number) => void;
-  flag: (x: number, y: number) => void;
 }
 
-const Square: React.FC<SquareProps> = ({ x, y, mark, flag }) => {
+const Square: React.FC<SquareProps> = ({ x, y }) => {
+  const markSquare = useSquareStore((state) => state.markSquare);
+  const flagSquare = useSquareStore((state) => state.flagSquare);
+  const squareState = useSquareStore((state) => state.squares[x][y]);
+
   const handleLeftClick = (event: React.MouseEvent) => {
     event.preventDefault();
-    mark(x, y);
+    markSquare(x, y);
   };
 
   const handleRightClick = (event: React.MouseEvent) => {
     event.preventDefault();
-    flag(x, y);
+    flagSquare(x, y);
   };
 
   return (
@@ -23,8 +27,19 @@ const Square: React.FC<SquareProps> = ({ x, y, mark, flag }) => {
       className="square"
       onClick={handleLeftClick}
       onContextMenu={handleRightClick}
-      style={{ width: "20px", height: "20px", border: "1px solid black" }}
-    ></div>
+      style={{
+        width: '20px',
+        height: '20px',
+        border: '1px solid black',
+        backgroundColor:
+          squareState === SquareState.Marked
+            ? 'black'
+            : squareState === SquareState.Flagged
+            ? 'red'
+            : 'white',
+      }}
+    >
+    </div>
   );
 };
 
