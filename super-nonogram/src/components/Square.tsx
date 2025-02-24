@@ -8,25 +8,12 @@ interface SquareProps {
 }
 
 const Square: React.FC<SquareProps> = ({ x, y }) => {
-  const markSquare = useSquareStore((state) => state.markSquare);
-  const flagSquare = useSquareStore((state) => state.flagSquare);
   const squareState = useSquareStore((state) => state.squares[x][y]);
-
-  const handleLeftClick = (event: React.MouseEvent) => {
-    event.preventDefault();
-    markSquare(x, y);
-  };
-
-  const handleRightClick = (event: React.MouseEvent) => {
-    event.preventDefault();
-    flagSquare(x, y);
-  };
 
   return (
     <div
       className="square"
-      onClick={handleLeftClick}
-      onContextMenu={handleRightClick}
+      onMouseEnter={() => useSquareStore.getState().enterSquare(x, y)}
       style={{
         width: '20px',
         height: '20px',

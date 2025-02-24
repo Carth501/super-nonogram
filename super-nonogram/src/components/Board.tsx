@@ -1,6 +1,8 @@
+
 import Square from './Square';
 
 function Board() {
+
   const renderSquares = () => {
     const squares = [];
     for (let i = 0; i < 5; i++) {
@@ -12,7 +14,7 @@ function Board() {
   };
 
   return (
-    <div className="grid grid-cols-5 grid-rows-5 gap-0">
+    <div className="grid grid-cols-5 grid-rows-5 gap-0" >
       {renderSquares()}
     </div>
   );
