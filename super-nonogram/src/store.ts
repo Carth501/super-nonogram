@@ -54,19 +54,17 @@ export const useSquareStore = create<SquareStore>((set) => ({
   attemptMarkSquare: (x: number, y: number) =>
     set((state) => {
       const newSquares = state.squares.map((row) => row.slice());
-      newSquares[x][y] =
-        newSquares[x][y] === SquareState.Marked
-          ? SquareState.Empty
-          : SquareState.Marked;
+      if (newSquares[x][y] === SquareState.Empty) {
+        newSquares[x][y] = SquareState.Marked;
+      }
       return { squares: newSquares };
     }),
   attemptFlagSquare: (x: number, y: number) =>
     set((state) => {
       const newSquares = state.squares.map((row) => row.slice());
-      newSquares[x][y] =
-        newSquares[x][y] === SquareState.Flagged
-          ? SquareState.Empty
-          : SquareState.Flagged;
+      if (newSquares[x][y] === SquareState.Empty) {
+        newSquares[x][y] = SquareState.Flagged;
+      }
       return { squares: newSquares };
     }),
 }));
