@@ -40,7 +40,7 @@ function App() {
         onContextMenu={handleContextMenu}
         onDragStart={handleDragStart}
       >
-        <h1 className="bg-red-200">Super Nonogram</h1>
+        <h1 className="bg-red-200 select-none">Super Nonogram</h1>
         <Board />
       </div>
     </>

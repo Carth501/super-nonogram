@@ -11,8 +11,8 @@ interface SquareStore {
   setRightButtonDown: (down: boolean) => void;
   enterSquare: (x: number, y: number) => void;
   exitSquare: () => void;
-  attemptMarkSquare: (x: number, y: number) => void;
-  attemptFlagSquare: (x: number, y: number) => void;
+  attemptMarkSquare: (x: number, y: number, clearing: boolean) => void;
+  attemptFlagSquare: (x: number, y: number, clearing: boolean) => void;
 }
 
 const createEmptySquares = (size: number): SquareState[][] => {
@@ -30,40 +30,44 @@ export const useSquareStore = create<SquareStore>((set) => ({
   setLeftButtonDown: (down: boolean) =>
     set((state) => {
       if (down && state.x !== null && state.y !== null) {
-        state.attemptMarkSquare(state.x, state.y);
+        state.attemptMarkSquare(state.x, state.y, true);
       }
       return { leftButtonDown: down };
     }),
   setRightButtonDown: (down: boolean) =>
     set((state) => {
       if (down && state.x !== null && state.y !== null) {
-        state.attemptFlagSquare(state.x, state.y);
+        state.attemptFlagSquare(state.x, state.y, true);
       }
       return { rightButtonDown: down };
     }),
   enterSquare: (x: number, y: number) =>
     set((state) => {
       if (state.leftButtonDown) {
-        state.attemptMarkSquare(x, y);
+        state.attemptMarkSquare(x, y, false);
       } else if (state.rightButtonDown) {
-        state.attemptFlagSquare(x, y);
+        state.attemptFlagSquare(x, y, false);
       }
       return { x, y };
     }),
   exitSquare: () => set({ x: null, y: null }),
-  attemptMarkSquare: (x: number, y: number) =>
+  attemptMarkSquare: (x: number, y: number, clearing: boolean) =>
     set((state) => {
       const newSquares = state.squares.map((row) => row.slice());
       if (newSquares[x][y] === SquareState.Empty) {
         newSquares[x][y] = SquareState.Marked;
+      } else if (clearing && newSquares[x][y] === SquareState.Marked) {
+        newSquares[x][y] = SquareState.Empty;
       }
       return { squares: newSquares };
     }),
-  attemptFlagSquare: (x: number, y: number) =>
+  attemptFlagSquare: (x: number, y: number, clearing: boolean) =>
     set((state) => {
       const newSquares = state.squares.map((row) => row.slice());
       if (newSquares[x][y] === SquareState.Empty) {
         newSquares[x][y] = SquareState.Flagged;
+      } else if (clearing && newSquares[x][y] === SquareState.Flagged) {
+        newSquares[x][y] = SquareState.Empty;
       }
       return { squares: newSquares };
     }),
