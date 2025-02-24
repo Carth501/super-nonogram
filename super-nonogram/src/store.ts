@@ -4,8 +4,8 @@ import { SquareState } from "./services/squareState";
 interface SquareStore {
   squares: SquareState[][];
   targetBoardState: SquareState[][];
-  rowHeaders: number[];
-  columnHeaders: number[];
+  rowHeaders: number[][];
+  columnHeaders: number[][];
   leftButtonDown: boolean;
   rightButtonDown: boolean;
   x: number | null;
@@ -26,26 +26,42 @@ const createEmptySquares = (size: number): SquareState[][] => {
   );
 };
 
-const calculateRowHeaders = (board: SquareState[][]): number[] => {
-  return board.map(
-    (row) => row.filter((cell) => cell === SquareState.Marked).length
-  );
+const calculateRowHeaders = (board: SquareState[][]): number[][] => {
+  return board.map((row) => {
+    const headers = [];
+    let count = 0;
+    row.forEach((cell) => {
+      if (cell === SquareState.Marked) {
+        count++;
+      } else if (count > 0) {
+        headers.push(count);
+        count = 0;
+      }
+    });
+    if (count > 0) headers.push(count);
+    return headers;
+  });
 };
 
-const calculateColumnHeaders = (board: SquareState[][]): number[] => {
+const calculateColumnHeaders = (board: SquareState[][]): number[][] => {
   const size = board.length;
-  const headers = Array(size).fill(0);
+  const headers: number[][] = Array.from({ length: size }, () => []);
   for (let col = 0; col < size; col++) {
+    let count = 0;
     for (let row = 0; row < size; row++) {
       if (board[row][col] === SquareState.Marked) {
-        headers[col]++;
+        count++;
+      } else if (count > 0) {
+        headers[col].push(count);
+        count = 0;
       }
     }
+    if (count > 0) headers[col].push(count);
   }
   return headers;
 };
 
-const generateTarget = (size: number): SquareState[][] => {
+const createTargetBoardState = (size: number): SquareState[][] => {
   const target = Array.from({ length: size }, () =>
     Array(size).fill(SquareState.Empty)
   );
@@ -116,7 +132,7 @@ export const useSquareStore = create<SquareStore>((set) => ({
       return { squares: newSquares };
     }),
   createTargetBoardState: () => {
-    const targetBoardState = generateTarget(5);
+    const targetBoardState = createTargetBoardState(5);
     const rowHeaders = calculateRowHeaders(targetBoardState);
     const columnHeaders = calculateColumnHeaders(targetBoardState);
     set({ targetBoardState, rowHeaders, columnHeaders });
@@ -127,4 +143,5 @@ export const useSquareStore = create<SquareStore>((set) => ({
     })),
 }));
 
+// Initialize the store with the target board state
 useSquareStore.getState().createTargetBoardState();
