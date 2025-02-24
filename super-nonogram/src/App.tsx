@@ -1,7 +1,10 @@
+import React, { useEffect, useState } from "react";
 import Board from "./components/Board";
+import DebugMenu from "./components/DebugMenu";
 import { useSquareStore } from "./store";
 
 function App() {
+  const [showDebugMenu, setShowDebugMenu] = useState(false);
   const setLeftButtonDown = useSquareStore((state) => state.setLeftButtonDown);
   const setRightButtonDown = useSquareStore(
     (state) => state.setRightButtonDown
@@ -31,6 +34,14 @@ function App() {
     e.preventDefault();
   };
 
+  useEffect(() => {
+    (
+      window as Window & typeof globalThis & { toggleDebugMenu?: () => void }
+    ).toggleDebugMenu = () => {
+      setShowDebugMenu((prev) => !prev);
+    };
+  }, []);
+
   return (
     <>
       <div
@@ -39,9 +50,11 @@ function App() {
         onMouseUp={handleMouseUp}
         onContextMenu={handleContextMenu}
         onDragStart={handleDragStart}
+        style={{ userSelect: "none" }}
       >
         <h1 className="text-2xl select-none">The Nonomancer</h1>
         <Board />
+        {showDebugMenu && <DebugMenu />}
       </div>
     </>
   );
