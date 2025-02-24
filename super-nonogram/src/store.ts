@@ -10,6 +10,7 @@ interface SquareStore {
   setLeftButtonDown: (down: boolean) => void;
   setRightButtonDown: (down: boolean) => void;
   enterSquare: (x: number, y: number) => void;
+  exitSquare: () => void;
 }
 
 const createEmptySquares = (size: number): SquareState[][] => {
@@ -64,4 +65,5 @@ export const useSquareStore = create<SquareStore>((set) => ({
       }
       return { squares: newSquares, x, y };
     }),
+  exitSquare: () => set({ x: null, y: null }),
 }));

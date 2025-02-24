@@ -14,6 +14,7 @@ const Square: React.FC<SquareProps> = ({ x, y }) => {
     <div
       className="square"
       onMouseEnter={() => useSquareStore.getState().enterSquare(x, y)}
+      onMouseLeave={() => useSquareStore.getState().exitSquare()}
       style={{
         width: '20px',
         height: '20px',
