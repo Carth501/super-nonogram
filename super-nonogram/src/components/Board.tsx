@@ -14,7 +14,8 @@ const Board: React.FC = () => {
         {columnHeaders.map((header, colIndex) => (
           <div
             key={colIndex}
-            className="header-cell w-8 min-h-16 flex flex-col items-center justify-center bg-gray-300"
+            className="header-cell w-8 min-h-16 flex flex-col items-center 
+            justify-center bg-gray-300"
           >
             {header.map((num, index) => (
               <div key={index}>{num}</div>
@@ -24,7 +25,8 @@ const Board: React.FC = () => {
       </div>
       {squares.map((row, rowIndex) => (
         <div key={rowIndex} className="row flex">
-          <div className="header-cell min-w-16 h-8 flex flex-row gap-3 items-center justify-center bg-gray-300">
+          <div className="header-cell min-w-16 h-8 flex flex-row gap-3
+          items-center justify-center bg-gray-300">
             {rowHeaders[rowIndex].map((num, index) => (
               <div key={index}>{num}</div>
             ))}

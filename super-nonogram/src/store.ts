@@ -143,5 +143,4 @@ export const useSquareStore = create<SquareStore>((set) => ({
     })),
 }));
 
-// Initialize the store with the target board state
 useSquareStore.getState().createTargetBoardState();
