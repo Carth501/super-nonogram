@@ -6,6 +6,16 @@ const Board: React.FC = () => {
   const squares = useSquareStore((state) => state.squares);
   const rowHeaders = useSquareStore((state) => state.rowHeaders);
   const columnHeaders = useSquareStore((state) => state.columnHeaders);
+  const checkSolution = useSquareStore((state) => state.checkSolution);
+
+  const handleSubmit = () => {
+    const isCorrect = checkSolution();
+    if (isCorrect) {
+      alert("Congratulations! You solved the puzzle.");
+    } else {
+      alert("The solution is incorrect. Please try again.");
+    }
+  };
 
   return (
     <div className="board">
@@ -36,6 +46,12 @@ const Board: React.FC = () => {
           ))}
         </div>
       ))}
+      <button
+        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+        onClick={handleSubmit}
+      >
+        Submit
+      </button>
     </div>
   );
 };

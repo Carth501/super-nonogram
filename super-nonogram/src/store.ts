@@ -18,6 +18,7 @@ interface SquareStore {
   attemptFlagSquare: (x: number, y: number, clearing: boolean) => void;
   createTargetBoardState: () => void;
   solvePuzzle: () => void;
+  checkSolution: () => boolean;
 }
 
 const createEmptySquares = (size: number): SquareState[][] => {
@@ -141,6 +142,20 @@ export const useSquareStore = create<SquareStore>((set) => ({
     set((state) => ({
       squares: state.targetBoardState,
     })),
+  checkSolution: () => {
+    const { squares, targetBoardState } = useSquareStore.getState();
+    for (let i = 0; i < squares.length; i++) {
+      for (let j = 0; j < squares[i].length; j++) {
+        if (
+          targetBoardState[i][j] == SquareState.Marked &&
+          squares[i][j] != SquareState.Marked
+        ) {
+          return false;
+        }
+      }
+    }
+    return true;
+  },
 }));
 
 useSquareStore.getState().createTargetBoardState();
