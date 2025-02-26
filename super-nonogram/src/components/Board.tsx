@@ -13,6 +13,7 @@ const Board: React.FC = () => {
   const newPuzzle = useSquareStore((state) => state.newPuzzle);
   const noteMode = useSquareStore((state) => state.noteMode);
   const setNoteMode = useSquareStore((state) => state.setNoteMode);
+  const clearAllNotes = useSquareStore((state) => state.clearAllNotes);
 
   const handleSubmit = () => {
     const isCorrect = checkSolution();
@@ -65,7 +66,7 @@ const Board: React.FC = () => {
         >
           Submit
         </button>
-        <div className="flex flex-col items-center pl-2 pr-2">
+        <div className="ml-4 pl-2 pr-2 flex flex-col items-center">
           <Label htmlFor="notes-mode">Notes Mode</Label>
           <Switch
             id="notes-mode"
@@ -73,6 +74,12 @@ const Board: React.FC = () => {
             onCheckedChange={setNoteMode}
           />
         </div>
+        <button
+          className="ml-4 px-4 py-2 bg-blue-500 text-white rounded"
+          onClick={clearAllNotes}
+        >
+          Clear Notes
+        </button>
         {solved && (
           <button
             className="ml-4 px-4 py-2 bg-green-500 text-white rounded"

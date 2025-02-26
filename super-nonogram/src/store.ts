@@ -24,6 +24,7 @@ interface SquareStore {
   checkSolution: () => boolean;
   newPuzzle: () => void;
   setNoteMode: (noteMode: boolean) => void;
+  clearAllNotes: () => void;
 }
 
 const createEmptySquares = (): SquareState[][] => {
@@ -213,6 +214,17 @@ export const useSquareStore = create<SquareStore>((set) => ({
     });
   },
   setNoteMode: (noteMode: boolean) => set({ noteMode }),
+  clearAllNotes: () =>
+    set((state) => {
+      const newSquares = state.squares.map((row) =>
+        row.map((cell) =>
+          cell === SquareState.NOTE_MARKED || cell === SquareState.NOTE_FLAGGED
+            ? SquareState.EMPTY
+            : cell
+        )
+      );
+      return { squares: newSquares };
+    }),
 }));
 
 useSquareStore.getState().newPuzzle();
