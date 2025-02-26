@@ -21,35 +21,36 @@ const Board: React.FC = () => {
 
   return (
     <div className="board">
-      <div className="column-headers flex">
-        <div className="header-cell w-16 h-8"></div>
-        {columnHeaders.map((header, colIndex) => (
-          <div
-            key={colIndex}
-            className="header-cell w-8 min-h-16 flex flex-col items-center 
-            justify-center bg-gray-300"
-          >
-            {header.map((num, index) => (
-              <div key={index}>{num}</div>
+      <table className="table-auto border-collapse">
+        <thead>
+          <tr>
+            <th></th>
+            {columnHeaders.map((header, colIndex) => (
+              <th key={colIndex} className="w-8 min-h-16 bg-gray-300 ">
+                {header.map((num, index) => (
+                  <div key={index}>{num}</div>
+                ))}
+              </th>
             ))}
-          </div>
-        ))}
-      </div>
-      {squares.map((row, rowIndex) => (
-        <div key={rowIndex} className="row flex">
-          <div
-            className="header-cell min-w-16 h-8 flex flex-row gap-3
-          items-center justify-center bg-gray-300"
-          >
-            {rowHeaders[rowIndex].map((num, index) => (
-              <div key={index}>{num}</div>
-            ))}
-          </div>
-          {row.map((_, colIndex) => (
-            <Square key={colIndex} x={rowIndex} y={colIndex} />
+          </tr>
+        </thead>
+        <tbody>
+          {squares.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              <td className="min-w-16 h-8 bg-gray-300 flex flex-row justify-end items-center gap-3 pl-2 pr-2 font-bold">
+                {rowHeaders[rowIndex].map((num, index) => (
+                  <div key={index}>{num}</div>
+                ))}
+              </td>
+              {row.map((_, colIndex) => (
+                <td key={colIndex}>
+                  <Square x={rowIndex} y={colIndex} />
+                </td>
+              ))}
+            </tr>
           ))}
-        </div>
-      ))}
+        </tbody>
+      </table>
       <div className="mt-4">
         <button
           className="px-4 py-2 bg-blue-500 text-white rounded"
