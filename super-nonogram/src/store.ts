@@ -127,6 +127,7 @@ export const useSquareStore = create<SquareStore>((set) => ({
   exitSquare: () => set({ x: null, y: null }),
   attemptMarkSquare: (x: number, y: number, clearing: boolean) =>
     set((state) => {
+      if (state.solved) return state;
       const newSquares = state.squares.map((row) => row.slice());
       if (newSquares[x][y] === SquareState.Empty) {
         newSquares[x][y] = SquareState.Marked;
@@ -137,6 +138,7 @@ export const useSquareStore = create<SquareStore>((set) => ({
     }),
   attemptFlagSquare: (x: number, y: number, clearing: boolean) =>
     set((state) => {
+      if (state.solved) return state;
       const newSquares = state.squares.map((row) => row.slice());
       if (newSquares[x][y] === SquareState.Empty) {
         newSquares[x][y] = SquareState.Flagged;
