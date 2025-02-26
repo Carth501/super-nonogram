@@ -11,6 +11,7 @@ interface SquareStore {
   x: number | null;
   y: number | null;
   solved: boolean;
+  gridSize: number;
   setLeftButtonDown: (down: boolean) => void;
   setRightButtonDown: (down: boolean) => void;
   enterSquare: (x: number, y: number) => void;
@@ -23,7 +24,8 @@ interface SquareStore {
   newPuzzle: () => void;
 }
 
-const createEmptySquares = (size: number): SquareState[][] => {
+const createEmptySquares = (): SquareState[][] => {
+  const size = useSquareStore.getState().gridSize;
   return Array.from({ length: size }, () =>
     Array(size).fill(SquareState.Empty)
   );
@@ -92,8 +94,9 @@ const createTargetBoardState = (size: number): SquareState[][] => {
 };
 
 export const useSquareStore = create<SquareStore>((set) => ({
-  squares: createEmptySquares(8),
-  targetBoardState: createEmptySquares(8),
+  gridSize: 15,
+  squares: [],
+  targetBoardState: [],
   rowHeaders: [],
   columnHeaders: [],
   leftButtonDown: false,
@@ -148,7 +151,9 @@ export const useSquareStore = create<SquareStore>((set) => ({
       return { squares: newSquares };
     }),
   createTargetBoardState: () => {
-    const targetBoardState = createTargetBoardState(8);
+    const targetBoardState = createTargetBoardState(
+      useSquareStore.getState().gridSize
+    );
     const rowHeaders = calculateRowHeaders(targetBoardState);
     const columnHeaders = calculateColumnHeaders(targetBoardState);
     set({ targetBoardState, rowHeaders, columnHeaders });
@@ -174,11 +179,12 @@ export const useSquareStore = create<SquareStore>((set) => ({
     return true;
   },
   newPuzzle: () => {
-    const targetBoardState = createTargetBoardState(8);
+    const gridSize = useSquareStore.getState().gridSize;
+    const targetBoardState = createTargetBoardState(gridSize);
     const rowHeaders = calculateRowHeaders(targetBoardState);
     const columnHeaders = calculateColumnHeaders(targetBoardState);
     set({
-      squares: createEmptySquares(8),
+      squares: createEmptySquares(),
       targetBoardState,
       rowHeaders,
       columnHeaders,
@@ -187,4 +193,4 @@ export const useSquareStore = create<SquareStore>((set) => ({
   },
 }));
 
-useSquareStore.getState().createTargetBoardState();
+useSquareStore.getState().newPuzzle();
