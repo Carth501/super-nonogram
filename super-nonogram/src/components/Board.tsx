@@ -1,6 +1,8 @@
+import { Switch } from "@/components/ui/switch";
 import React from "react";
 import { useSquareStore } from "../store";
 import Square from "./Square";
+import { Label } from "./ui/label";
 
 const Board: React.FC = () => {
   const squares = useSquareStore((state) => state.squares);
@@ -19,10 +21,6 @@ const Board: React.FC = () => {
     } else {
       alert("The solution is incorrect. Please try again.");
     }
-  };
-
-  const handleNoteModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNoteMode(event.target.checked);
   };
 
   return (
@@ -60,21 +58,21 @@ const Board: React.FC = () => {
           ))}
         </tbody>
       </table>
-      <div className="mt-4">
+      <div className="mt-4 flex flex-row">
         <button
           className="px-4 py-2 bg-blue-500 text-white rounded"
           onClick={handleSubmit}
         >
           Submit
         </button>
-        <label>
-          Notes Mode
-          <input
-            type="checkbox"
+        <div className="flex flex-col items-center pl-2 pr-2">
+          <Label htmlFor="notes-mode">Notes Mode</Label>
+          <Switch
+            id="notes-mode"
             checked={noteMode}
-            onChange={handleNoteModeChange}
+            onCheckedChange={setNoteMode}
           />
-        </label>
+        </div>
         {solved && (
           <button
             className="ml-4 px-4 py-2 bg-green-500 text-white rounded"

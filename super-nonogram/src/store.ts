@@ -96,7 +96,7 @@ const createTargetBoardState = (size: number): SquareState[][] => {
 };
 
 export const useSquareStore = create<SquareStore>((set) => ({
-  gridSize: 15,
+  gridSize: 10,
   squares: [],
   targetBoardState: [],
   rowHeaders: [],
