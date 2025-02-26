@@ -22,8 +22,19 @@ const Square: React.FC<SquareProps> = ({ x, y }) => {
             : squareState === SquareState.FLAGGED
             ? "red"
             : "white",
+        color:
+          squareState === SquareState.NOTE_MARKED
+            ? "black"
+            : squareState === SquareState.NOTE_FLAGGED
+            ? "red"
+            : "black",
       }}
-    ></div>
+    >
+      {squareState === SquareState.NOTE_MARKED ||
+      squareState === SquareState.NOTE_FLAGGED
+        ? "X"
+        : ""}
+    </div>
   );
 };
 

@@ -12,6 +12,7 @@ interface SquareStore {
   y: number | null;
   solved: boolean;
   gridSize: number;
+  noteMode: boolean;
   setLeftButtonDown: (down: boolean) => void;
   setRightButtonDown: (down: boolean) => void;
   enterSquare: (x: number, y: number) => void;
@@ -22,6 +23,7 @@ interface SquareStore {
   solvePuzzle: () => void;
   checkSolution: () => boolean;
   newPuzzle: () => void;
+  setNoteMode: (noteMode: boolean) => void;
 }
 
 const createEmptySquares = (): SquareState[][] => {
@@ -104,6 +106,7 @@ export const useSquareStore = create<SquareStore>((set) => ({
   x: null,
   y: null,
   solved: false,
+  noteMode: false,
   setLeftButtonDown: (down: boolean) =>
     set((state) => {
       if (down && state.x !== null && state.y !== null) {
@@ -133,9 +136,18 @@ export const useSquareStore = create<SquareStore>((set) => ({
       if (state.solved) return state;
       const newSquares = state.squares.map((row) => row.slice());
       if (newSquares[x][y] === SquareState.EMPTY) {
-        newSquares[x][y] = SquareState.MARKED;
+        if (!state.noteMode) {
+          newSquares[x][y] = SquareState.MARKED;
+        } else {
+          newSquares[x][y] = SquareState.NOTE_MARKED;
+        }
       } else if (clearing && newSquares[x][y] === SquareState.MARKED) {
         newSquares[x][y] = SquareState.EMPTY;
+      } else if (
+        !state.noteMode &&
+        newSquares[x][y] === SquareState.NOTE_MARKED
+      ) {
+        newSquares[x][y] = SquareState.MARKED;
       }
       return { squares: newSquares };
     }),
@@ -144,9 +156,18 @@ export const useSquareStore = create<SquareStore>((set) => ({
       if (state.solved) return state;
       const newSquares = state.squares.map((row) => row.slice());
       if (newSquares[x][y] === SquareState.EMPTY) {
-        newSquares[x][y] = SquareState.FLAGGED;
+        if (!state.noteMode) {
+          newSquares[x][y] = SquareState.FLAGGED;
+        } else {
+          newSquares[x][y] = SquareState.NOTE_FLAGGED;
+        }
       } else if (clearing && newSquares[x][y] === SquareState.FLAGGED) {
         newSquares[x][y] = SquareState.EMPTY;
+      } else if (
+        !state.noteMode &&
+        newSquares[x][y] === SquareState.NOTE_FLAGGED
+      ) {
+        newSquares[x][y] = SquareState.FLAGGED;
       }
       return { squares: newSquares };
     }),
@@ -191,6 +212,7 @@ export const useSquareStore = create<SquareStore>((set) => ({
       solved: false,
     });
   },
+  setNoteMode: (noteMode: boolean) => set({ noteMode }),
 }));
 
 useSquareStore.getState().newPuzzle();
