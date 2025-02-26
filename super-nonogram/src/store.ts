@@ -10,6 +10,7 @@ interface SquareStore {
   rightButtonDown: boolean;
   x: number | null;
   y: number | null;
+  solved: boolean;
   setLeftButtonDown: (down: boolean) => void;
   setRightButtonDown: (down: boolean) => void;
   enterSquare: (x: number, y: number) => void;
@@ -19,6 +20,7 @@ interface SquareStore {
   createTargetBoardState: () => void;
   solvePuzzle: () => void;
   checkSolution: () => boolean;
+  newPuzzle: () => void;
 }
 
 const createEmptySquares = (size: number): SquareState[][] => {
@@ -88,6 +90,7 @@ export const useSquareStore = create<SquareStore>((set) => ({
   rightButtonDown: false,
   x: null,
   y: null,
+  solved: false,
   setLeftButtonDown: (down: boolean) =>
     set((state) => {
       if (down && state.x !== null && state.y !== null) {
@@ -141,6 +144,7 @@ export const useSquareStore = create<SquareStore>((set) => ({
   solvePuzzle: () =>
     set((state) => ({
       squares: state.targetBoardState,
+      solved: true,
     })),
   checkSolution: () => {
     const { squares, targetBoardState } = useSquareStore.getState();
@@ -154,7 +158,20 @@ export const useSquareStore = create<SquareStore>((set) => ({
         }
       }
     }
+    set({ solved: true });
     return true;
+  },
+  newPuzzle: () => {
+    const targetBoardState = createTargetBoardState(5);
+    const rowHeaders = calculateRowHeaders(targetBoardState);
+    const columnHeaders = calculateColumnHeaders(targetBoardState);
+    set({
+      squares: createEmptySquares(5),
+      targetBoardState,
+      rowHeaders,
+      columnHeaders,
+      solved: false,
+    });
   },
 }));
 

@@ -7,6 +7,8 @@ const Board: React.FC = () => {
   const rowHeaders = useSquareStore((state) => state.rowHeaders);
   const columnHeaders = useSquareStore((state) => state.columnHeaders);
   const checkSolution = useSquareStore((state) => state.checkSolution);
+  const solved = useSquareStore((state) => state.solved);
+  const newPuzzle = useSquareStore((state) => state.newPuzzle);
 
   const handleSubmit = () => {
     const isCorrect = checkSolution();
@@ -35,8 +37,10 @@ const Board: React.FC = () => {
       </div>
       {squares.map((row, rowIndex) => (
         <div key={rowIndex} className="row flex">
-          <div className="header-cell min-w-16 h-8 flex flex-row gap-3
-          items-center justify-center bg-gray-300">
+          <div
+            className="header-cell min-w-16 h-8 flex flex-row gap-3
+          items-center justify-center bg-gray-300"
+          >
             {rowHeaders[rowIndex].map((num, index) => (
               <div key={index}>{num}</div>
             ))}
@@ -46,12 +50,22 @@ const Board: React.FC = () => {
           ))}
         </div>
       ))}
-      <button
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-        onClick={handleSubmit}
-      >
-        Submit
-      </button>
+      <div className="mt-4">
+        <button
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+          onClick={handleSubmit}
+        >
+          Submit
+        </button>
+        {solved && (
+          <button
+            className="ml-4 px-4 py-2 bg-green-500 text-white rounded"
+            onClick={newPuzzle}
+          >
+            New Puzzle
+          </button>
+        )}
+      </div>
     </div>
   );
 };
