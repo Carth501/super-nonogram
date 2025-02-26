@@ -12,7 +12,7 @@ const Square: React.FC<SquareProps> = ({ x, y }) => {
 
   return (
     <div
-      className="square w-8 h-8 border-1 border-gray-800"
+      className="square w-8 h-8 border-1 border-gray-800 flex justify-center items-center"
       onMouseEnter={() => useSquareStore.getState().enterSquare(x, y)}
       onMouseLeave={() => useSquareStore.getState().exitSquare()}
       style={{
@@ -31,9 +31,24 @@ const Square: React.FC<SquareProps> = ({ x, y }) => {
       }}
     >
       {squareState === SquareState.NOTE_MARKED ||
-      squareState === SquareState.NOTE_FLAGGED
-        ? "X"
-        : ""}
+      squareState === SquareState.NOTE_FLAGGED ? (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="4"
+          stroke="currentColor"
+          className="size-6 align-middle"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18 18 6M6 6l12 12"
+          />
+        </svg>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
