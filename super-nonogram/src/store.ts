@@ -149,6 +149,12 @@ export const useSquareStore = create<SquareStore>((set) => ({
         newSquares[x][y] === SquareState.NOTE_MARKED
       ) {
         newSquares[x][y] = SquareState.MARKED;
+      } else if (
+        clearing &&
+        state.noteMode &&
+        newSquares[x][y] === SquareState.NOTE_MARKED
+      ) {
+        newSquares[x][y] = SquareState.EMPTY;
       }
       return { squares: newSquares };
     }),
@@ -169,6 +175,12 @@ export const useSquareStore = create<SquareStore>((set) => ({
         newSquares[x][y] === SquareState.NOTE_FLAGGED
       ) {
         newSquares[x][y] = SquareState.FLAGGED;
+      } else if (
+        clearing &&
+        state.noteMode &&
+        newSquares[x][y] === SquareState.NOTE_FLAGGED
+      ) {
+        newSquares[x][y] = SquareState.EMPTY;
       }
       return { squares: newSquares };
     }),
