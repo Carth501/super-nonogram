@@ -26,7 +26,10 @@ const Board: React.FC = () => {
           <tr>
             <th></th>
             {columnHeaders.map((header, colIndex) => (
-              <th key={colIndex} className="w-8 min-h-16 bg-gray-300 ">
+              <th
+                key={colIndex}
+                className="w-8 min-h-16 bg-gray-300 align-bottom"
+              >
                 {header.map((num, index) => (
                   <div key={index}>{num}</div>
                 ))}
