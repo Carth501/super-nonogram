@@ -1,6 +1,6 @@
-import React from 'react';
-import { SquareState } from '../services/squareState';
-import { useSquareStore } from '../store';
+import React from "react";
+import { SquareState } from "../services/squareState";
+import { useSquareStore } from "../store";
 
 interface SquareProps {
   x: number;
@@ -17,14 +17,13 @@ const Square: React.FC<SquareProps> = ({ x, y }) => {
       onMouseLeave={() => useSquareStore.getState().exitSquare()}
       style={{
         backgroundColor:
-          squareState === SquareState.Marked
-            ? 'black'
-            : squareState === SquareState.Flagged
-            ? 'red'
-            : 'white',
+          squareState === SquareState.MARKED
+            ? "black"
+            : squareState === SquareState.FLAGGED
+            ? "red"
+            : "white",
       }}
-    >
-    </div>
+    ></div>
   );
 };
 

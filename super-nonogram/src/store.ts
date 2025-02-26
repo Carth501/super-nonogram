@@ -27,7 +27,7 @@ interface SquareStore {
 const createEmptySquares = (): SquareState[][] => {
   const size = useSquareStore.getState().gridSize;
   return Array.from({ length: size }, () =>
-    Array(size).fill(SquareState.Empty)
+    Array(size).fill(SquareState.EMPTY)
   );
 };
 
@@ -37,7 +37,7 @@ const calculateRowHeaders = (board: SquareState[][]): number[][] => {
     let count = 0;
     let total = 0;
     row.forEach((cell) => {
-      if (cell === SquareState.Marked) {
+      if (cell === SquareState.MARKED) {
         count++;
         total++;
       } else if (count > 0) {
@@ -60,7 +60,7 @@ const calculateColumnHeaders = (board: SquareState[][]): number[][] => {
     let total = 0;
     let count = 0;
     for (let row = 0; row < size; row++) {
-      if (board[row][col] === SquareState.Marked) {
+      if (board[row][col] === SquareState.MARKED) {
         count++;
         total++;
       } else if (count > 0) {
@@ -78,17 +78,17 @@ const calculateColumnHeaders = (board: SquareState[][]): number[][] => {
 
 const createTargetBoardState = (size: number): SquareState[][] => {
   const target = Array.from({ length: size }, () =>
-    Array(size).fill(SquareState.Empty)
+    Array(size).fill(SquareState.EMPTY)
   );
   const marks = Math.ceil(size * size * 0.5);
   for (let i = 0; i < marks; i++) {
     let x = Math.floor(Math.random() * size);
     let y = Math.floor(Math.random() * size);
-    while (target[x][y] === SquareState.Marked) {
+    while (target[x][y] === SquareState.MARKED) {
       x = Math.floor(Math.random() * size);
       y = Math.floor(Math.random() * size);
     }
-    target[x][y] = SquareState.Marked;
+    target[x][y] = SquareState.MARKED;
   }
   return target;
 };
@@ -132,10 +132,10 @@ export const useSquareStore = create<SquareStore>((set) => ({
     set((state) => {
       if (state.solved) return state;
       const newSquares = state.squares.map((row) => row.slice());
-      if (newSquares[x][y] === SquareState.Empty) {
-        newSquares[x][y] = SquareState.Marked;
-      } else if (clearing && newSquares[x][y] === SquareState.Marked) {
-        newSquares[x][y] = SquareState.Empty;
+      if (newSquares[x][y] === SquareState.EMPTY) {
+        newSquares[x][y] = SquareState.MARKED;
+      } else if (clearing && newSquares[x][y] === SquareState.MARKED) {
+        newSquares[x][y] = SquareState.EMPTY;
       }
       return { squares: newSquares };
     }),
@@ -143,10 +143,10 @@ export const useSquareStore = create<SquareStore>((set) => ({
     set((state) => {
       if (state.solved) return state;
       const newSquares = state.squares.map((row) => row.slice());
-      if (newSquares[x][y] === SquareState.Empty) {
-        newSquares[x][y] = SquareState.Flagged;
-      } else if (clearing && newSquares[x][y] === SquareState.Flagged) {
-        newSquares[x][y] = SquareState.Empty;
+      if (newSquares[x][y] === SquareState.EMPTY) {
+        newSquares[x][y] = SquareState.FLAGGED;
+      } else if (clearing && newSquares[x][y] === SquareState.FLAGGED) {
+        newSquares[x][y] = SquareState.EMPTY;
       }
       return { squares: newSquares };
     }),
@@ -168,8 +168,8 @@ export const useSquareStore = create<SquareStore>((set) => ({
     for (let i = 0; i < squares.length; i++) {
       for (let j = 0; j < squares[i].length; j++) {
         if (
-          targetBoardState[i][j] == SquareState.Marked &&
-          squares[i][j] != SquareState.Marked
+          targetBoardState[i][j] == SquareState.MARKED &&
+          squares[i][j] != SquareState.MARKED
         ) {
           return false;
         }

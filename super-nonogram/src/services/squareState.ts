@@ -1,5 +1,5 @@
 export enum SquareState {
-  Empty,
-  Marked,
-  Flagged,
+  EMPTY,
+  MARKED,
+  FLAGGED,
 }
