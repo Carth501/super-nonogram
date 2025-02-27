@@ -33,7 +33,7 @@ const Board: React.FC = () => {
             {columnHeaders.map((header, colIndex) => (
               <th
                 key={colIndex}
-                className="w-8 min-h-16 bg-gray-300 align-bottom"
+                className="w-8 min-h-16 bg-gray-300 align-bottom sticky top-0"
               >
                 {header.map((num, index) => (
                   <div key={index}>{num}</div>
@@ -45,7 +45,7 @@ const Board: React.FC = () => {
         <tbody>
           {squares.map((row, rowIndex) => (
             <tr key={rowIndex}>
-              <td className="min-w-16 h-8 bg-gray-300 flex flex-row justify-end items-center gap-3 pl-2 pr-2 font-bold">
+              <td className="min-w-16 h-8 bg-gray-300 flex flex-row justify-end items-center gap-3 pl-2 pr-2 font-bold sticky left-0">
                 {rowHeaders[rowIndex].map((num, index) => (
                   <div key={index}>{num}</div>
                 ))}
