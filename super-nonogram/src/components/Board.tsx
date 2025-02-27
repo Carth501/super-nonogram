@@ -1,6 +1,8 @@
+import { Switch } from "@/components/ui/switch";
 import React from "react";
 import { useSquareStore } from "../store";
 import Square from "./Square";
+import { Label } from "./ui/label";
 
 const Board: React.FC = () => {
   const squares = useSquareStore((state) => state.squares);
@@ -11,6 +13,7 @@ const Board: React.FC = () => {
   const newPuzzle = useSquareStore((state) => state.newPuzzle);
   const noteMode = useSquareStore((state) => state.noteMode);
   const setNoteMode = useSquareStore((state) => state.setNoteMode);
+  const clearAllNotes = useSquareStore((state) => state.clearAllNotes);
 
   const handleSubmit = () => {
     const isCorrect = checkSolution();
@@ -19,10 +22,6 @@ const Board: React.FC = () => {
     } else {
       alert("The solution is incorrect. Please try again.");
     }
-  };
-
-  const handleNoteModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNoteMode(event.target.checked);
   };
 
   return (
@@ -34,7 +33,7 @@ const Board: React.FC = () => {
             {columnHeaders.map((header, colIndex) => (
               <th
                 key={colIndex}
-                className="w-8 min-h-16 bg-gray-300 align-bottom"
+                className="w-8 min-h-16 bg-gray-300 align-bottom sticky top-0"
               >
                 {header.map((num, index) => (
                   <div key={index}>{num}</div>
@@ -46,7 +45,7 @@ const Board: React.FC = () => {
         <tbody>
           {squares.map((row, rowIndex) => (
             <tr key={rowIndex}>
-              <td className="min-w-16 h-8 bg-gray-300 flex flex-row justify-end items-center gap-3 pl-2 pr-2 font-bold">
+              <td className="min-w-16 h-8 bg-gray-300 flex flex-row justify-end items-center gap-3 pl-2 pr-2 font-bold sticky left-0">
                 {rowHeaders[rowIndex].map((num, index) => (
                   <div key={index}>{num}</div>
                 ))}
@@ -60,21 +59,27 @@ const Board: React.FC = () => {
           ))}
         </tbody>
       </table>
-      <div className="mt-4">
+      <div className="mt-4 flex flex-row">
         <button
           className="px-4 py-2 bg-blue-500 text-white rounded"
           onClick={handleSubmit}
         >
           Submit
         </button>
-        <label>
-          Notes Mode
-          <input
-            type="checkbox"
+        <div className="ml-4 pl-2 pr-2 flex flex-col items-center">
+          <Label htmlFor="notes-mode">Notes Mode</Label>
+          <Switch
+            id="notes-mode"
             checked={noteMode}
-            onChange={handleNoteModeChange}
+            onCheckedChange={setNoteMode}
           />
-        </label>
+        </div>
+        <button
+          className="ml-4 px-4 py-2 bg-blue-500 text-white rounded"
+          onClick={clearAllNotes}
+        >
+          Clear Notes
+        </button>
         {solved && (
           <button
             className="ml-4 px-4 py-2 bg-green-500 text-white rounded"
